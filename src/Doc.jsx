@@ -6,6 +6,7 @@ import { Timestamp } from "firebase/firestore";
 import { db } from "./firebase"; // Ensure db is imported from your Firebase setup
 import { collection, getDocs, doc, addDoc } from "firebase/firestore";
 import { PlusSign } from "./PlusSign";
+import { SideBar } from "./SideBar";
 export const Doc = () => {
   const { user } = useContext(UserContext);
 
@@ -48,39 +49,40 @@ export const Doc = () => {
   return (
     <div>
       <Header />
-      <div>
-        <PlusSign />
-      </div>
+      {/* main screen */}
+      <div className="grid grid-cols-1 sm:grid-cols-5">
+        <div className="col-span-1">
+          <SideBar />
+        </div>
+        {/* add doc */}
+        <div className="col-span-4   ">
+          {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+          <h1 className="my-7 ml-8 text-2xl">Welcome to Drive</h1>
 
-      {/* add doc */}
-      <div className="mt-5 w-[90%]  mx-auto">
-        {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-        <div>Text editor options here</div>
+          <table className="w-[90%] mx-auto text-center">
+            <thead>
+              <tr>
+                <th>Name</th>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Owner</th>
-              <th>Title</th>
-              <th>Body</th>
-              <th>Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            {docArr.map((doc) => (
-              <tr
-                key={doc.id}
-                onClick={() => navigate(`/doc/${doc.id}`)}
-                className="hover:cursor-pointer"
-              >
-                <td>{user.uid === doc.userId ? "Owner" : "Other"}</td>
-                <td>{doc.title}</td>
-                <td>{doc.body}</td>
-                <td>{doc.createdAt?.toDate().toLocaleString() || "N/A"}</td>
+                <th>Location</th>
+                <th>Resaon Suggested</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {docArr.map((doc) => (
+                <tr
+                  key={doc.id}
+                  onClick={() => navigate(`/doc/${doc.id}`)}
+                  className="hover:cursor-pointer border-y-2"
+                >
+                  <td>{doc.title}</td>
+                  <td>{doc.location || "N/A"}</td>
+                  <td>{doc.createdAt?.toDate().toLocaleString() || "N/A"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
