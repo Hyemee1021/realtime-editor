@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase"; // Ensure you have the correct Firebase setup
 import { UserContext, UserProvider } from "./provider/UserProvider";
+import { DocHeader } from "./DocHeader";
 
 const DocPage = () => {
   const { documentId } = useParams(); // Capture the productId from the URL
@@ -11,11 +12,8 @@ const DocPage = () => {
   const { user } = useContext(UserContext);
   const userId = user.uid;
 
-  console.log("userId:", userId);
-  console.log("documentId:", documentId);
-
   const [docData, setDocData] = useState(null);
-  console.log(docData);
+  const docDataTitle = docData.title;
   const [errorMessage, setErrorMessage] = useState(null);
 
   // Fetch one user document from Firestore
@@ -54,6 +52,7 @@ const DocPage = () => {
   }
   return (
     <div>
+      <DocHeader userId={userId} docDataTitle={docDataTitle} />
       <h1>{docData.title}</h1>
       <p>{docData.body}</p>
       <p>
